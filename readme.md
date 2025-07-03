@@ -1,91 +1,94 @@
-[CoreProtect Lookup Web Interface (CoLWI)](https://github.com/chuushi/CoreProtect-Lookup-Web-Interface)
+# 本项目已由社区全面汉化
+
+本仓库在原版基础上进行了如下修改：
+- 所有界面、交互、配置、文档均已翻译为中文
+- 所有 PHP/JS 代码注释已翻译为中文，且为无注释的函数、变量等补充了中文注释
+- readme、changelog、contributing 等文档已全部汉化
+- 适当本地化了部分术语和界面风格
+
+---
+
+[CoreProtect 查询 Web 界面 (CoLWI)](https://github.com/chuushi/CoreProtect-Lookup-Web-Interface)
 ===============================================================================
-*A flexible lookup web interface for CoreProtect 2.*
+*CoreProtect 2 的灵活查询 Web 界面。*
 
 ![Imgur](https://i.imgur.com/gre6LpC.png)
 
-**Version:** [v1.0.0-pre2](https://github.com/chuushi/CoreProtect-Lookup-Web-Interface/releases/latest)
+**版本：** [v1.0.0-pre2](https://github.com/chuushi/CoreProtect-Lookup-Web-Interface/releases/latest)
 
-*[Changelog](changelog.md) | [Contributing](contributing.md)*
+*[更新日志](changelog.md) | [贡献指南](contributing.md)*
 
-This is a _feature-packed_ web application that gives you the power to look up
-anything CoreProtect is capable of logging in the most efficient way.
-[CoreProtect, a Minecraft plugin,](https://www.spigotmc.org/resources/8631/)
-is developed by Intellii.
+这是一个功能丰富的 Web 应用程序，让你可以高效地查询 CoreProtect 能记录的所有内容。
+[CoreProtect 是一个 Minecraft 插件](https://www.spigotmc.org/resources/8631/)，由 Intellii 开发。
 
-This web app is capable of looking up logged data as if doing it from the game.
-Some filters are ported to this plugin, such as:
+本 Web 应用支持像在游戏内一样查询日志数据。
+部分过滤器已移植到本插件，例如：
 
-* Lookup by action
-* Lookup by username
-* Lookup by block name
-* Lookup by time
+* 按操作类型查询
+* 按用户名查询
+* 按方块名查询
+* 按时间查询
 
-In addition, this plugin makes it possible to:
+此外，本插件还支持：
 
-* Lookup data by coordinates and world
-* View more than four results per page
-* Filter out rolled back data
-* ~~View what was written on the signs~~ (TBD)
-* Search by keywords
+* 按坐标和世界查询数据
+* 每页显示超过四条结果
+* 过滤已回滚的数据
+* ~~查看告示牌内容~~（待开发）
+* 按关键词搜索
 
-# Setup
+# 部署
 
-## Prerequisites
+## 前置条件
 
-- A web server with **PHP 5.6** or above
-    - Required extensions: PDO, PDO-SQLITE or PDO-MYSQL
-- A CoreProtect database used by **CoreProtect 2.12** or above.
-    - If using SQLite in real-time, the web server must be on the same machine
-      as the Minecraft server.
+- 一台安装有 **PHP 5.6** 或更高版本的 Web 服务器
+    - 需要扩展：PDO，PDO-SQLITE 或 PDO-MYSQL
+- 一份由 **CoreProtect 2.12** 或更高版本生成的数据库。
+    - 若使用 SQLite 实时查询，Web 服务器需与 Minecraft 服务器在同一台机器上。
 
-## Download
+## 下载
 
-- **Option 1:** `git clone`
-    - This option makes it easier to update the web app.
-    - Run the following command in somewhere on the web server.
+- **方式一：** `git clone`
+    - 便于后续更新 Web 应用。
+    - 在 Web 服务器上运行如下命令：
 ```sh
 git clone https://github.com/chuushi/CoreProtect-Lookup-Web-Interface.git
 ```
 
-- **Option 2:** Download
-    - Download the
-      [latest release `.zip` file](https://github.com/chuushi/CoreProtect-Lookup-Web-Interface/releases/latest).
-    - Extract the .zip file somewhere on the web server.
+- **方式二：** 直接下载
+    - 下载[最新发布的 `.zip` 文件](https://github.com/chuushi/CoreProtect-Lookup-Web-Interface/releases/latest)。
+    - 将 .zip 文件解压到 Web 服务器目录。
 
-## Configuration
+## 配置
 
-Edit all the necessary configuration from `config.php`.  All fields are
-documented in the configuration file.
+编辑 `config.php` 文件中的所有必要配置。所有字段在配置文件中均有注释说明。
 
-## Updating
+## 更新
 
-If you used the **option 1** to download the web app, you can run:
+如果你使用了**方式一**下载 Web 应用，可以运行：
 ```sh
 git stash
 git pull
 git stash pop
 ```
 
-- `git stash` stashes uncommitted changes
-- `git pull` downloads and updates the repository with the latest changes
-- `git stash pop` applies the stashed changes into the repository.
+- `git stash` 用于暂存未提交的更改
+- `git pull` 拉取并更新仓库到最新版本
+- `git stash pop` 将暂存的更改应用回仓库
 
-If you see this message after running `git stash pop`:
+如果在执行 `git stash pop` 后看到如下提示：
 ```
 CONFLICT (content): Merge conflict in config.php
 ```
 
-then you must edit the file manually (look for `<<<<<<<`, `=======`, and
-`>>>>>>>`) then run:
+则需要手动编辑该文件（查找 `<<<<<<<`、`=======` 和 `>>>>>>>`），然后运行：
 ```sh
 git add config.php
 ```
 
-If you used the **option 2**, then you must re-download the `.zip` file and
-manually migrate the `config.php` file over.
+如果你使用了**方式二**，则需要重新下载 `.zip` 文件，并手动迁移 `config.php` 文件。
 
-# Plugin Links
+# 插件链接
 
 * [BukkitDev](//dev.bukkit.org/bukkit-plugins/coreprotect-lwi/)
 * [Spigot](//www.spigotmc.org/resources/coreprotect-lookup-web-interface.28033/)

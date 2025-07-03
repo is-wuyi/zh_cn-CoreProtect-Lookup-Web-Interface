@@ -1,12 +1,14 @@
 /**
- * Main JavaScript
+ * 主脚本（Main JavaScript）
  *
- * CoreProtect Lookup Web Interface
- * @author Simon Chuu
- * @copyright 2015-2020 Simon Chuu
- * @license MIT License
- * @link https://github.com/chuushi/CoreProtect-Lookup-Web-Interface
- * @since 1.0.0
+ * CoreProtect 查询 Web 界面
+ * 作者：Simon Chuu
+ * 版权所有 © 2015-2020 Simon Chuu
+ * 汉化：is-wuyi
+ * 汉化项目地址：https://github.com/is-wuyi/zh_cn-CoreProtect-Lookup-Web-Interface
+ * 许可证：MIT License
+ * 原项目地址：https://github.com/chuushi/CoreProtect-Lookup-Web-Interface
+ * 版本：1.0.0
  */
 (function () {
 "use strict";
@@ -124,9 +126,9 @@ $lookup.time.datetimepicker({
 // ##########################
 //  Corner and Radius Toggle
 // ##########################
-const CORNER = "Corner";
-const CENTER = "Center";
-const RADIUS = "Radius";
+const CORNER = "角";
+const CENTER = "中心";
+const RADIUS = "半径";
 $lookup.coordsToggle.click(function () {coordsToggle()});
 
 function coordsToggle(center) {
@@ -211,7 +213,7 @@ $login.form.submit(function (ev) {
                 $login.username.val('');
                 $login.password.val('');
             } else {
-                $login.alert.html(getAlertElement('Wrong credentials', "warning"));
+                $login.alert.html(getAlertElement('错误的凭据', "warning"));
             }
         },
         error: function (xhr, status, thrown) {
@@ -220,7 +222,7 @@ $login.form.submit(function (ev) {
             if (thrown)
                 text = thrown;
             else if (xhr.status === 0)
-                text = "Timed out (Check your internet connection)";
+                text = "请求超时（请检查网络连接）";
             else
                 text = xhr.status + "";
 
@@ -245,7 +247,7 @@ $login.activate.click(function (ev) {
         },
         success: function (data) {
             if (data.success) {
-                $login.alert.html(getAlertElement("Logged out successfully", "success"));
+                $login.alert.html(getAlertElement("注销成功", "success"));
                 logout();
             } else { // This shouldn't happen
                 $login.alert.html(getAlertElement("???", "warning"));
@@ -257,7 +259,7 @@ $login.activate.click(function (ev) {
             if (thrown)
                 text = thrown;
             else if (xhr.status === 0)
-                text = "Timed out (Check your internet connection)";
+                text = "请求超时（请检查网络连接）";
             else
                 text = xhr.status + "";
 
@@ -275,8 +277,8 @@ function login(username) {
 
     loginUsername = username;
 
-    $login.name.html(`Hello, <b>${username}</b>!`);
-    $login.activate.text("Logout");
+    $login.name.html(`你好, <b>${username}</b>!`);
+    $login.activate.text("注销");
 }
 
 function logout() {
@@ -286,7 +288,7 @@ function logout() {
     loginUsername = null;
 
     $login.name.html("");
-    $login.activate.text("Login");
+    $login.activate.text("登录");
 }
 
 // ####################
@@ -308,20 +310,20 @@ $more.form.submit(function (ev) {
 function submit(ev, more) {
     ev.preventDefault();
     if (ajaxWaiting) {
-        addAlert("Please wait for the previous lookup to complete.", more, "info");
+        addAlert("请等待上一次查询完成。", more, "info");
         return;
     }
 
     if (more) {
         if (currentLookup == null) {
-            addAlert("A lookup is required.", true, "info");
+            addAlert("需要先进行一次查询。", true, "info");
             return;
         }
         serializeMore();
     } else {
         const a = serializeActions();
         if (!a) {
-            addAlert("An action is required.", false, "info");
+            addAlert("请选择至少一个操作类型。", false, "info");
             return;
         }
         serializeLookup(a);
@@ -456,13 +458,13 @@ let mapHref;
 function xhrError(xhr, status, thrown, more) {
     let text;
     if (status === "parsererror") {
-        text = thrown + " (Possible webserver PHP misconfiguration)";
+        text = thrown + "（可能是 Web 服务器 PHP 配置错误）";
     } else if (thrown) {
         text = xhr.status + ": " + thrown;
         if (xhr.status === 401)
-            text += ' (You\'re not logged in. <a href="#" data-toggle="modal" data-target="#login-modal">Login</a>)';
+            text += '（未登录。<a href="#" data-toggle="modal" data-target="#login-modal">登录</a>）';
     } else if (xhr.status === 0) {
-        text = "Timed out (Check your internet connection)";
+        text = "请求超时（请检查网络连接）";
     } else {
         text = xhr.status + "";
     }
@@ -470,7 +472,7 @@ function xhrError(xhr, status, thrown, more) {
 }
 
 function populateTable(data, more) {
-    $queryTime.text("Request generated in "+Math.round(data[0].duration*1000)+"ms");
+    $queryTime.text("请求耗时 "+Math.round(data[0].duration*1000)+"毫秒");
 
     if (data[0].status !== 0) {
         let st = data[0];
@@ -480,7 +482,7 @@ function populateTable(data, more) {
         } else if (st.status === 2) {
             text = `${st.code} (${st.driverCode}): ${st.reason}`
         } else {
-            text = "Unknown error occured."
+            text = "发生未知错误。"
         }
         addAlert(text, more, "danger");
         return;
@@ -491,13 +493,13 @@ function populateTable(data, more) {
     if (rows.length === 0) {
         if (more) {
             if ((currentLookup.a & A_REV_TIME ) === 0)
-                $tableBody.prepend('<tr><th><i class="fa fa-minus"></i></th><td colspan="5">No more results</td></tr>');
+                $tableBody.prepend('<tr><th><i class="fa fa-minus"></i></th><td colspan="5">没有更多结果</td></tr>');
             else {
-                addAlert("No more results. (If on a live server, wait a bit then submit for more results)", more, "info");
+                addAlert("没有更多结果。（如为实时服务器，请稍后再试）", more, "info");
                 $more.submit.prop("disabled", false);
             }
         } else {
-            addAlert("That lookup returned no results.", more, "info");
+            addAlert("本次查询无结果。", more, "info");
         }
         return;
     }
@@ -633,23 +635,17 @@ function populateRow(row) {
     return ret;
 }
 
+// (Duplicate definition removed; see above for the single retained function)
+
+// 下拉菜单汉化
 function addDropButton(attrMap) {
     const ret = document.createElement("button");
     ret.classList.add("btn", "btn-secondary", "btn-inline", "output-add-dropdown", "dropdown-toggle", "dropdown-toggle-split");
     ret.role = "button";
     for (const prop in attrMap)
-        // noinspection JSUnfilteredForInLoop
         ret.dataset[prop] = attrMap[prop];
     ret.dataset.toggle = "dropdown";
     return ret;
-}
-
-function makeMapHref(dataset) {
-    return mapHref
-        .replace("{world}", dataset.world)
-        .replace("{x}", dataset.x)
-        .replace("{y}", dataset.y)
-        .replace("{z}", dataset.z);
 }
 
 // ###################
@@ -675,24 +671,24 @@ $tableBody.on("click", ".output-add-dropdown", function() {
         case "date":
             const time = document.createElement("span");
             time.classList.add("dropdown-item-text");
-            time.innerHTML = `Unix time: <code>${this.dataset.time}</code>`;
-            lt1.innerHTML = "Before";
-            lt2.innerHTML = "After";
+            time.innerHTML = `Unix 时间: <code>${this.dataset.time}</code>`;
+            lt1.innerHTML = "之前";
+            lt2.innerHTML = "之后";
             addon.append(time);
             break;
         case "user":
             const uuid = document.createElement("span");
             uuid.classList.add("dropdown-item-text");
             uuid.innerHTML = `UUID: <code>${this.dataset.uuid}</code>`;
-            lt1.innerHTML = "Include";
-            lt2.innerHTML = "Exclude";
+            lt1.innerHTML = "包含";
+            lt2.innerHTML = "排除";
             break;
         case "coordinates":
             if (mapHref) {
             const map = document.createElement("a");
                 map.classList.add("dropdown-item");
                 map.href = makeMapHref(this.dataset);
-                map.innerHTML = "Open in map";
+                map.innerHTML = "在地图中打开";
                 map.target = frameName;
                 addon.append(map);
             }
@@ -700,24 +696,24 @@ $tableBody.on("click", ".output-add-dropdown", function() {
             cntr.classList.add("dropdown-item");
             cntr.dataset.fillPos = LT3;
             cntr.href = "#";
-            cntr.innerHTML = "Center";
-            lt1.innerHTML = "Corner 1";
-            lt2.innerHTML = "Corner 2";
+            cntr.innerHTML = "中心";
+            lt1.innerHTML = "角 1";
+            lt2.innerHTML = "角 2";
             addon.append(cntr);
             break;
         case "material":
-            lt1.innerHTML = "Include";
-            lt2.innerHTML = "Exclude";
+            lt1.innerHTML = "包含";
+            lt2.innerHTML = "排除";
             break;
         case "entity":
             const enid = document.createElement("span");
             if (this.dataset.data) {
-                enid.innerHTML = (this.dataset.data.length === 36 ? "UUID" : "Entity row ID") + `: <code>${this.dataset.data}</code>`;
+                enid.innerHTML = (this.dataset.data.length === 36 ? "UUID" : "实体行 ID") + `: <code>${this.dataset.data}</code>`;
                 enid.classList.add("dropdown-item-text");
                 addon.append(enid);
             }
-            lt1.innerHTML = "Include";
-            lt2.innerHTML = "Exclude";
+            lt1.innerHTML = "包含";
+            lt2.innerHTML = "排除";
             break;
     }
     addon.append(lt1);
@@ -833,7 +829,7 @@ function csvSetRemove(text, value) {
 }
 
 function getAlertElement(text, level) {
-    return `<div class="alert alert-${level} alert-dismissible" role="alert">${text}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>`;
+    return `<div class="alert alert-${level} alert-dismissible" role="alert">${text}<button type="button" class="close" data-dismiss="alert" aria-label="关闭"><span aria-hidden="true">&times;</span></button></div>`;
 }
 
 // Run functions

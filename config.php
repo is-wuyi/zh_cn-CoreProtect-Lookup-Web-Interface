@@ -1,43 +1,40 @@
 <?php return [
 /**
- * Configuration File
+ * 配置文件
  *
- * CoreProtect Lookup Web Interface config
+ * CoreProtect 查询 Web 界面配置
  * @since 1.0.0
  */
 
 ########################
-# Account Configuration
-# There's only two access accounts: administrator and user.
-# The array is as follows: [ username, password ]
+# 账户配置
+# 仅有两种访问账户：管理员和普通用户。
+# 数组格式如下：[ 用户名, 密码 ]
 
-# Administrator account can manage configuration from the web.
-# set password to enable admin access (no special permissions at the moment).
-'administrator' => ['Administrator', ''],
+# 管理员账户可通过网页管理配置。
+# 设置密码以启用管理员访问（目前无特殊权限）。
+'administrator' => ['管理员', ''],
 
-# User account to access lookup.
-# set password to require log in to use the lookup.
-'user' => ['User', ''],
+# 普通用户账户用于查询。
+# 设置密码后，查询功能需登录。
+'user' => ['用户', ''],
 
 
 ################################
-# Database/Server configuration
-# If you have multiple databases, configure each database source here by
-# copying 'server' array right under and renaming 'server' to a different
-# server name.
-#   type         = 'mysql' or 'sqlite' all lowercase
-#   path         = SQLite path to CoreProtect's database.db
-#   host         = MySQL database host[:port]
-#   database     = MySQL database name
-#   username     = MySQL username
-#   password     = MySQL password
-#   flags        = MySQL flags to put at the end of connection URI
-#                  (don't change if you don't need to)
-#   prefix       = CoreProtect prefix
-#   preBlockName = Whether to prepend "minecraft:" for material name if no colon (:) is present
-#                  (May need to be turned off for databases with data from MC 1.7)
-#   mapLink      = Link to view on the map. (Dynmap, Overviewer, etc.)
-#                  {world} for world; {x} {y} {z} for xyz coordinates
+# 数据库/服务器配置
+# 如有多个数据库，在下方复制 'server' 数组并重命名。
+#   type         = 'mysql' 或 'sqlite'，全部小写
+#   path         = SQLite 数据库路径
+#   host         = MySQL 数据库主机[:端口]
+#   database     = MySQL 数据库名
+#   username     = MySQL 用户名
+#   password     = MySQL 密码
+#   flags        = MySQL 连接 URI 末尾参数（如无需求请勿更改）
+#   prefix       = CoreProtect 表前缀
+#   preBlockName = 若方块名无冒号(:)时，是否自动加 "minecraft:"
+#                  （如数据库含有 MC 1.7 数据，建议关闭）
+#   mapLink      = 地图查看链接（如 Dynmap、Overviewer 等）。
+#                  {world} 表示世界名，{x} {y} {z} 表示坐标
 'database' => [
     'server' => [
         'type'        => 'mysql',
@@ -54,17 +51,17 @@
 ],
 
 ########################
-# Website Configuration
+# 网站配置
 
-# Form Configuration
-#   limit           = default lookup query limit
-#   moreLimit       = default "load more" query limit
-#   max             = maximum limit for single query
-#   pageInterval    = how many entries to divide the pagination by
-#   timeDivider     = how many entries the table displays before the interval shows up
-#   locale          = Date locale (website locale coming soon?)
-#   dateTimeFormat  = Date format (see https://momentjs.com/docs/#/parsing/string-format/)
-#                     (try 'YYYY.MM.DD hh:mm:ss a')
+# 表单配置
+#   count           = 默认查询条数
+#   moreCount       = 默认“加载更多”条数
+#   max             = 单次查询最大条数
+#   pageInterval    = 分页间隔
+#   timeDivider     = 表格每隔多少条显示时间分隔
+#   locale          = 日期本地化（网站本地化功能即将上线）
+#   dateTimeFormat  = 日期格式（参考 https://momentjs.com/docs/#/parsing/string-format/）
+#                     （如 'YYYY.MM.DD hh:mm:ss a'）
 'form' => [
     'count'         => 30,
     'moreCount'     => 10,
@@ -74,28 +71,25 @@
     'dateTimeFormat'=> 'LL LTS'
 ],
 
-# Webpage name and style configuration
-#   bootstrap = Link to a bootstrap swatch, local or from CDN.
-#               If from a CDN, using the HTML <link> with
-#               'integrity' and 'crossorigin' is recommended!
-#               (you can get link to theme from:)
-#               https://www.bootstrapcdn.com/bootswatch/
-#   darkInput = if the bootstrap theme is a dark theme
-#               (Affects the color of input fields)
-#   name      = Page name
-#   href      = link where the page name leads to
+# 页面名称与样式配置
+#   bootstrap = bootstrap 主题链接，可本地或 CDN。
+#               若用 CDN，建议使用带 integrity 和 crossorigin 的 <link> 标签
+#               （可在 https://www.bootstrapcdn.com/bootswatch/ 获取主题链接）
+#   darkInput = 是否为深色主题（影响输入框颜色）
+#   name      = 页面名称
+#   href      = 页面名称跳转链接
 'page' => [
     'bootstrap' => '<link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/slate/bootstrap.min.css" rel="stylesheet" integrity="sha384-G9YbB4o4U6WS4wCthMOpAeweY4gQJyyx0P3nZbEBHyz+AtNoeasfRChmek1C2iqV" crossorigin="anonymous">',
     'darkInput' => true,
-    'name'      => 'CoreProtect Lookup Web Interface',
+    'name'      => 'CoreProtect 查询 Web 界面',
     'href'      => '/',
     'copyright' => 'Awesome Server, 2020'
 ],
 
-# Navigation Bar Customization
-#   add more pairs below to add more links to the navbar.
+# 导航栏自定义
+#   可在下方添加更多链接
 'navbar' => [
-    'Home' => 'index.php',
+    '首页' => 'index.php',
     #'BanManager' => '/banmanager/',
     #'Dynmap' => 'http://127.0.0.1:8123/',
 ]

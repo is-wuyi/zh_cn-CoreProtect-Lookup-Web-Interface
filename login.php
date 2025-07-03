@@ -1,5 +1,8 @@
 <?php
 /**
+ * 汉化：is-wuyi
+ * 汉化项目地址：https://github.com/is-wuyi/zh_cn-CoreProtect-Lookup-Web-Interface
+ *
  * Login JSON
  *
  * Returns login success as a JSON file

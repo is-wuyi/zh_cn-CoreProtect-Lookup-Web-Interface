@@ -1,56 +1,62 @@
 <?php
 /**
- * StatementPreparer class
+ * SQL 语句预处理类
  *
- * Class for preparing an SQL statement with corresponding parameters
- *
- * CoreProtect Lookup Web Interface
- * @author Simon Chuu
- * @copyright 2015-2020 Simon Chuu
- * @license MIT License
- * @link https://github.com/chuushi/CoreProtect-Lookup-Web-Interface
- * @since 1.0.0
+ * CoreProtect 查询 Web 界面
+ * 作者：Simon Chuu
+ * 版权所有 © 2015-2020 Simon Chuu
+ * 汉化：is-wuyi
+ * 汉化项目地址：https://github.com/is-wuyi/zh_cn-CoreProtect-Lookup-Web-Interface
+ * 许可证：MIT License
+ * 原项目地址：https://github.com/chuushi/CoreProtect-Lookup-Web-Interface
+ * 版本：1.0.0
  */
 class StatementPreparer
 {
-    const FLAG_PRE_BLOCK_NAME = 0x01;
-    const FLAG_USE_BLOCKDATA_TABLE_YES = 0x02;
-    const FLAG_USE_BLOCKDATA_TABLE_NO = 0x04;
-
+    // 标志位常量
+    const FLAG_PRE_BLOCK_NAME = 0x01; // 方块名是否加前缀
+    const FLAG_USE_BLOCKDATA_TABLE_YES = 0x02; // 使用 blockdata 表
+    const FLAG_USE_BLOCKDATA_TABLE_NO = 0x04;  // 不使用 blockdata 表
     const FLAG_USE_BLOCKDATA_TABLE_DEFINED = self::FLAG_USE_BLOCKDATA_TABLE_YES | self::FLAG_USE_BLOCKDATA_TABLE_NO;
 
-    const A_BLOCK_MINE = 0x0001;
-    const A_BLOCK_PLACE = 0x0002;
-    const A_CLICK = 0x0004;
-    const A_KILL = 0x0008;
-    const A_CONTAINER_OUT = 0x0010;
-    const A_CONTAINER_IN = 0x0020;
-    const A_CHAT = 0x0040;
-    const A_COMMAND = 0x0080;
-    const A_SESSION = 0x0100;
-    const A_USERNAME = 0x0200;
+    // 操作类型常量
+    const A_BLOCK_MINE = 0x0001;      // 挖掘方块
+    const A_BLOCK_PLACE = 0x0002;     // 放置方块
+    const A_CLICK = 0x0004;           // 点击
+    const A_KILL = 0x0008;            // 击杀
+    const A_CONTAINER_OUT = 0x0010;   // 容器取出
+    const A_CONTAINER_IN = 0x0020;    // 容器放入
+    const A_CHAT = 0x0040;            // 聊天
+    const A_COMMAND = 0x0080;         // 命令
+    const A_SESSION = 0x0100;         // 会话
+    const A_USERNAME = 0x0200;        // 用户名
 
+    // 复合操作常量
     const A_BLOCK_MATERIAL = self::A_BLOCK_MINE | self::A_BLOCK_PLACE | self::A_CLICK;
     const A_BLOCK_ENTITY = self::A_KILL;
     const A_BLOCK_TABLE = self::A_BLOCK_MATERIAL | self::A_KILL;
     const A_CONTAINER_TABLE = self::A_CONTAINER_IN | self::A_CONTAINER_OUT;
 
+    // 查询条件常量
     const A_WHERE_MATERIAL = self::A_BLOCK_MATERIAL | self::A_CONTAINER_TABLE | self::A_SESSION;
     const A_WHERE_ENTITY = self::A_BLOCK_ENTITY;
     const A_WHERE_COORDS = self::A_BLOCK_TABLE | self::A_CONTAINER_TABLE | self::A_SESSION;
     const A_WHERE_ROLLBACK = self::A_BLOCK_MINE | self::A_BLOCK_PLACE | self::A_KILL | self::A_CONTAINER_TABLE;
     const A_WHERE_KEYWORD = self::A_CHAT | self::A_COMMAND | self::A_USERNAME;
 
+    // 查询表类型常量
     const A_LOOKUP_TABLE = self::A_BLOCK_TABLE | self::A_CONTAINER_TABLE | self::A_CHAT | self::A_COMMAND | self::A_SESSION | self::A_USERNAME;
 
-    const A_EX_USER = 0x0400;
-    const A_EX_BLOCK = 0x0800;
-    const A_EX_ENTITY = 0x1000;
-    const A_EX_WORLD = 0x2000;
-    const A_ROLLBACK_YES = 0x4000;
-    const A_ROLLBACK_NO = 0x8000;
-    const A_REV_TIME = 0x10000;
+    // 排除条件常量
+    const A_EX_USER = 0x0400;     // 排除用户
+    const A_EX_BLOCK = 0x0800;    // 排除方块
+    const A_EX_ENTITY = 0x1000;   // 排除实体
+    const A_EX_WORLD = 0x2000;    // 排除世界
+    const A_ROLLBACK_YES = 0x4000; // 仅回滚
+    const A_ROLLBACK_NO = 0x8000;  // 仅未回滚
+    const A_REV_TIME = 0x10000;    // 时间反向
 
+    // 表类型编号
     const BLOCK = 1;
     const CONTAINER = 2;
     const CHAT = 3;
@@ -62,6 +68,7 @@ class StatementPreparer
     const MATERIAL_MAP = 18;
     const ENTITY_MAP = 19;
 
+    // 过滤器编号
     const FILTER_LIMIT = 0;
     const FILTER_MATERIAL = 1;
     const FILTER_ENTITY = 2;
@@ -74,6 +81,7 @@ class StatementPreparer
     const FILTER_KEYWORD_USER = 9;
     const FILTER_LIMIT_SUM = 10;
 
+    // SQL 字段常量
     const W_MATERIAL_ID = 'mm.id';
     const W_ENTITY_ID = 'em.id';
     const W_USER_ID = 'u.rowid';
@@ -95,40 +103,48 @@ class StatementPreparer
     const W_WORLD = "w.world IN";
     const W_TIME = 'c.time';
 
-    const WHERE_XYZ = "x BETWEEN ? AND ? AND y BETWEEN ? AND ? AND z BETWEEN ? AND ?";
-    const WHERE_ROLLED_BACK = "rolled_back= ?";
+    const WHERE_XYZ = "x BETWEEN ? AND ? AND y BETWEEN ? AND ? AND z BETWEEN ? AND ?"; // 坐标范围
+    const WHERE_ROLLED_BACK = "rolled_back= ?"; // 回滚条件
 
     const W_KEYWORD_MESSAGE = "c.message";
     const W_KEYWORD_USER = "c.user";
 
     /**
-     * Input booleans
+     * 输入布尔值
      * @var boolean
      */
     private $useBlockdata;
     /**
-     * Input integers
+     * 输入整型参数
      * @var integer
      */
     private $a, $t, $x, $y, $z, $x2, $y2, $z2, $count, $offset;
     /**
-     * Input strings
+     * 输入字符串
      * @var string
      */
     private $prefix;
     /**
-     * Input arrays from csv strings
+     * 输入数组（由 csv 字符串转换）
      * @var string[]
      */
     private $u, $b, $e, $w, $keyword;
 
-    /** @var string[] */
+    /** @var string[] SQL 片段和参数 */
     private $sqlFromWhere, $sqlWhereParts, $fromWhereParamFilters, $sqlParams = [];
-    /** @var string[][] */
+    /** @var string[][] SQL where 参数 */
     private $whereParams;
-    /** @var string */
+    /** @var string SQL 排序方式 */
     private $sqlOrder;
 
+    /**
+     * 构造函数
+     * @param string $prefix 数据表前缀
+     * @param array $req 请求参数
+     * @param int $count 总记录数
+     * @param int $moreCount 额外记录数
+     * @param int $flag 标志位
+     */
     public function __construct($prefix, & $req, $count, $moreCount, $flag = 0) {
         $this->prefix = $prefix;
         $this->offset = self::nonnullInt($req['offset'], 0);
@@ -154,6 +170,12 @@ class StatementPreparer
                     $this->b[$k] = 'minecraft:' . $v;
     }
 
+    /**
+     * 处理 CSV 字符串为数组
+     * @param string $in 输入字符串
+     * @param boolean $trimInner 是否修剪内部空白
+     * @return array|null 处理后的数组或 null
+     */
     private function nonnullArr(& $in, $trimInner = true) {
         if (isset($in)) {
             $trim = trim($in);
@@ -169,6 +191,12 @@ class StatementPreparer
         return null;
     }
 
+    /**
+     * 处理输入为整型
+     * @param mixed $in 输入值
+     * @param int|null $ifunset 未设置时的默认值
+     * @return int|null 处理后的整型值或 null
+     */
     private function nonnullInt(& $in, $ifunset = null) {
         if (isset($in)) {
             $trim = trim($in);
@@ -178,22 +206,42 @@ class StatementPreparer
         return $ifunset;
     }
 
+    /**
+     * 获取世界过滤器
+     * @return array|null
+     */
     public function getW() {
         return $this->w;
     }
 
+    /**
+     * 获取用户过滤器
+     * @return array|null
+     */
     public function getU() {
         return $this->u;
     }
 
+    /**
+     * 获取方块过滤器
+     * @return array|null
+     */
     public function getB() {
         return $this->b;
     }
 
+    /**
+     * 获取实体过滤器
+     * @return array|null
+     */
     public function getE() {
         return $this->e;
     }
 
+    /**
+     * 准备检查 SQL 语句
+     * @return string
+     */
     public function prepareCheck() {
         $this->populate();
         $this->sqlParams = [];
@@ -221,6 +269,10 @@ class StatementPreparer
         return $ret;
     }
 
+    /**
+     * 准备数据查询 SQL 语句
+     * @return string
+     */
     public function prepareStatementData() {
         $this->populate();
         $this->sqlParams = [];
@@ -255,6 +307,10 @@ class StatementPreparer
         return $ret . " ORDER BY time " . $this->sqlOrder . " LIMIT ?, ?";
     }
 
+    /**
+     * 准备计数查询 SQL 语句
+     * @return string
+     */
     public function prepareStatementCount() {
         $this->populate();
 
@@ -275,11 +331,19 @@ class StatementPreparer
         return "SELECT * FROM (" . join(" UNION ALL ", $queries) . ")";
     }
 
+    /**
+     * 获取 SQL 参数
+     * @return array
+     */
     public function getParams() {
         $this->populate();
         return $this->sqlParams;
     }
 
+    /**
+     * 添加 SQL 参数
+     * @param string|array $filter 过滤器
+     */
     private function appenedSqlParams($filter) {
         if (is_array($filter))
             foreach ($filter as $f)
@@ -452,10 +516,11 @@ class StatementPreparer
     }
 
     /**
+     * 生成 WHERE 子句
      * @param $table
      * @param string[] $columns
-     * @param string $additional Additional where query
-     * @return string pre-spaced at the beginning
+     * @param string $additional 额外的 WHERE 条件
+     * @return string 生成的 WHERE 子句
      */
     private function generateWhere($table, $columns, $additional = null) {
         $this->fromWhereParamFilters[$table] = [];
@@ -492,6 +557,9 @@ class StatementPreparer
         return " WHERE " . join(" AND ", $wheres);
     }
 
+    /**
+     * 解析 WHERE 条件
+     */
     private function parseWheres() {
         $this->sqlWhereParts = [];
         $this->whereParams = [];
@@ -543,9 +611,10 @@ class StatementPreparer
     }
 
     /**
-     * @param int $filter
-     * @param string[] $query
-     * @param boolean $exFlag
+     * 处理绝对值查询
+     * @param int $filter 过滤器
+     * @param string[] $query 查询值
+     * @param boolean $exFlag 排除标志
      */
     private function whereAbsoluteString($filter, $query, $exFlag) {
         $names = [];
@@ -554,7 +623,7 @@ class StatementPreparer
         if ($filter === self::FILTER_ENTITY || $filter === self::FILTER_USER) {
             foreach ($query as $k => $val) {
 
-                if (strlen($val) == 36) { // TODO: Make sure $val is an actual UUID
+                if (strlen($val) == 36) { // TODO: 确保 $val 是一个有效的 UUID
                     $uuids[] = $val;
                 } else {
                     $names[] = $val;
@@ -650,10 +719,23 @@ class StatementPreparer
         }
     }
 
+    /**
+     * 生成 ID 查询条件
+     * @param string $tableId 表名
+     * @param string $mapId 映射 ID
+     * @param string $whereIn IN 查询条件
+     * @param boolean $exFlag 排除标志
+     * @return string 生成的查询条件
+     */
     private function selectIdWhere($tableId, $mapId, $whereIn, $exFlag) {
         return $tableId . ($exFlag ? ' NOT ' : ' ') . "IN (SELECT $mapId WHERE $whereIn)";
     }
 
+    /**
+     * 生成占位符字符串
+     * @param array $array 数组
+     * @return string 占位符字符串
+     */
     private function qmPh(& $array) {
         $len = sizeof($array);
         if ($len === 0)
@@ -664,6 +746,9 @@ class StatementPreparer
         return $ret;
     }
 
+    /**
+     * 处理关键词搜索
+     */
     private function whereKeywordSearch() {
         $placeholders = [];
         $msgParts = [];
@@ -681,6 +766,11 @@ class StatementPreparer
         $this->whereParams[self::FILTER_KEYWORD_USER] = &$placeholders;
     }
 
+    /**
+     * 生成检查 SQL 语句
+     * @param int $map 地图类型
+     * @return string
+     */
     private function generateCheckFromWhere($map) {
         switch ($map) {
             case self::WORLD_MAP:
@@ -716,7 +806,7 @@ class StatementPreparer
         }
 
         if ($map === self::USER_MAP && $this->e !== null) {
-            // Search entities as well
+            // 同时搜索实体
             if ($list === null)
                 $list = $this->e;
             else
@@ -726,9 +816,9 @@ class StatementPreparer
         $list = array_unique($list);
 
         if ($entity = ($map === self::ENTITY_MAP) || $map === self::USER_MAP) {
-            // filter out UUIDs
+            // 过滤 UUID
             foreach ($list as $k => $v) {
-                if (strlen($v) === 36) { // TODO: Make sure $val is an actual UUID
+                if (strlen($v) === 36) { // TODO: 确保 $val 是一个有效的 UUID
                     if ($entity)
                         $uuids[] = $v;
                     unset($list[$k]);

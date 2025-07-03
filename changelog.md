@@ -1,24 +1,24 @@
-Changelog
+更新日志
 =========
 
-## Development versions
+## 开发版本
 
 ### v1.0.0-pre2 (2020.05.18)
-- Extend support down to CoreProtect 2.12.0 (Minecraft 1.8)
+- 扩展支持至 CoreProtect 2.12.0（Minecraft 1.8）
 
 ### v1.0.0-pre1 (2020.05.17)
-- First pre-release
-- Caveats:
-    - Autocomplete not implemented
-    - Can't set to custom locale
-    - Login supports credentials only from `config.php` file
-    - Can't load sign data (yet)
+- 首个预发布版本
+- 注意事项：
+    - 自动补全未实现
+    - 不能自定义本地化
+    - 登录仅支持 `config.php` 文件中的凭据
+    - 暂不支持读取告示牌内容
 
 ### v1.0.0-SNAPSHOT (2020.05.06)
-- Finally restarted rewrite of the program
+- 重新启动程序重写
 
 ### v0.9.3 (2016.08.24)
-- Official latest version built on bootstrap v4-alpha
+- 官方最新版本，基于 bootstrap v4-alpha
 
 ### (2015.09.11)
-- Initial commit on GitHub
+- GitHub 上的首次提交

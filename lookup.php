@@ -1,5 +1,8 @@
 <?php
 /**
+ * 汉化：is-wuyi
+ * 汉化项目地址：https://github.com/is-wuyi/zh_cn-CoreProtect-Lookup-Web-Interface
+ *
  * Lookup JSON
  *
  * Returns query results as a JSON file
@@ -50,8 +53,8 @@ if (array_key_exists('username', $_REQUEST) && array_key_exists('password', $_RE
     if (!$session->login($_REQUEST['username'], $_REQUEST['password'])) {
         http_response_code(401);
         $return[0]["status"] = 1;
-        $return[0]["code"] = "Access Denied";
-        $return[0]["reason"] = "The login credentials is incorrect.";
+        $return[0]["code"] = "访问被拒绝";
+        $return[0]["reason"] = "登录凭据不正确。";
         exit();
     }
 }
@@ -59,24 +62,24 @@ if (array_key_exists('username', $_REQUEST) && array_key_exists('password', $_RE
 if (!$session->hasLookupAccess()) {
     http_response_code(401);
     $return[0]["status"] = 1;
-    $return[0]["code"] = "Access Denied";
-    $return[0]["reason"] = "You must log in first to access the data.";
+    $return[0]["code"] = "访问被拒绝";
+    $return[0]["reason"] = "您必须先登录才能访问数据。";
     exit();
 }
 
 $serverName = $_REQUEST['server'];
 if ($serverName == null) {
     $return[0]["status"] = 1;
-    $return[0]["code"] = "Request Error";
-    $return[0]["reason"] = "No server specified.";
+    $return[0]["code"] = "请求错误";
+    $return[0]["reason"] = "未指定服务器。";
     exit();
 }
 
 $server = $config['database'][$serverName];
 if (!isset($server)) {
     $return[0]["status"] = 1;
-    $return[0]["code"] = "Configuration Error";
-    $return[0]["reason"] = "The specified server '$serverName' is not configured.";
+    $return[0]["code"] = "配置错误";
+    $return[0]["reason"] = "指定的服务器 '$serverName' 未配置。";
     exit();
 }
 
@@ -162,16 +165,16 @@ if ($checkInputQuery) {
 
         if ($wSize || $uSize || $mSize || $eSize) {
             $return[0]["status"] = 1;
-            $return[0]["code"] = "Unknown text in"
-                . ($wSize ? " 'Worlds'" : '')
-                . ($uSize ? " 'Users'" : '')
-                . ($mSize ? " 'Materials'" : '')
-                . ($eSize ? " 'Entities'" : '');
+            $return[0]["code"] = "未知内容于"
+                . ($wSize ? " '世界'" : '')
+                . ($uSize ? " '用户'" : '')
+                . ($mSize ? " '方块/物品'" : '')
+                . ($eSize ? " '实体'" : '');
             $return[0]["reason"]
-                = ($wSize ? "Worlds: '" . join("', '", $w) . "';" : '')
-                . ($uSize ? "Users: '" . join("', '", $u) . "';" : '')
-                . ($mSize ? "Materials: '" . join("', '", $m) . "';" : '')
-                . ($eSize ? "Entities: '" . join("', '", $e) . "';" : '');
+                = ($wSize ? "世界: '" . join("', '", $w) . "';" : '')
+                . ($uSize ? "用户: '" . join("', '", $u) . "';" : '')
+                . ($mSize ? "方块/物品: '" . join("', '", $m) . "';" : '')
+                . ($eSize ? "实体: '" . join("', '", $e) . "';" : '');
             exit();
         }
     }

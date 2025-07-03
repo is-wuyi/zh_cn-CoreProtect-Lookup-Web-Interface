@@ -1,14 +1,14 @@
-# Contributing
-I'll be humbled to get contributors on this project!  If you'd like to contribute anything to this project, you may fork this project, make changes, then create a pull request. You may add new features or fix bugs you may find in the project.
+# 贡献指南
+欢迎任何人为本项目做出贡献！如果你想为本项目贡献代码，可以 fork 本仓库，进行修改后提交 Pull Request。你可以添加新功能或修复你发现的 bug。
 
-# Guidelines
-Here are the general and common guidelines:
-- Use spaces to indent lines.  Do not use tabs.
-- Comment anything that may become confusing down the road.
+# 编码规范
+通用规范如下：
+- 使用空格进行缩进，不要使用制表符（Tab）。
+- 对可能令人困惑的地方添加注释。
 
-## HTML and CSS
-- Use two-space indents inside elements.
+## HTML 和 CSS
+- 元素内部缩进使用两个空格。
 
-## JavaScript and PHP
-- Use four-space indents.
-- For non-functions, add space between text and the parentheses.
+## JavaScript 和 PHP
+- 使用四个空格缩进。
+- 非函数调用时，括号前后加空格。

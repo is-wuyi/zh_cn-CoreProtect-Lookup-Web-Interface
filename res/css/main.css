@@ -1,12 +1,14 @@
 /**
- * Main CSS
+ * 主样式表（Main CSS）
  *
- * CoreProtect Lookup Web Interface
- * @author Simon Chuu
- * @copyright 2015-2020 Simon Chuu
- * @license MIT License
- * @link https://github.com/chuushi/CoreProtect-Lookup-Web-Interface
- * @since 1.0.0
+ * CoreProtect 查询 Web 界面
+ * 作者：Simon Chuu
+ * 版权所有 © 2015-2020 Simon Chuu
+ * 汉化：is-wuyi
+ * 汉化项目地址：https://github.com/is-wuyi/zh_cn-CoreProtect-Lookup-Web-Interface
+ * 许可证：MIT License
+ * 原项目地址：https://github.com/chuushi/CoreProtect-Lookup-Web-Interface
+ * 版本：1.0.0
  */
 /* Form styling */
 .input-group-text, .form-control, .btn, .custom-select {

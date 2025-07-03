@@ -1,24 +1,24 @@
 <?php
 /**
- * PDOWrapper class
+ * PDO 封装类
  *
- * Class for handling PDO connection
- *
- * CoreProtect Lookup Web Interface
- * @author Simon Chuu
- * @copyright 2015-2020 Simon Chuu
- * @license MIT License
- * @link https://github.com/chuushi/CoreProtect-Lookup-Web-Interface
- * @since 1.0.0
+ * CoreProtect 查询 Web 界面
+ * 作者：Simon Chuu
+ * 版权所有 © 2015-2020 Simon Chuu
+ * 汉化：is-wuyi
+ * 汉化项目地址：https://github.com/is-wuyi/zh_cn-CoreProtect-Lookup-Web-Interface
+ * 许可证：MIT License
+ * 原项目地址：https://github.com/chuushi/CoreProtect-Lookup-Web-Interface
+ * 版本：1.0.0
  */
 
 class PDOWrapper {
-    /** @var array */
+    /** @var array 错误信息和数据库配置 */
     private $error, $dbinfo;
 
     /**
-     * PDOWrapper constructor.
-     * @param array $dbinfo configuration section for database connection
+     * 构造函数，初始化数据库配置
+     * @param array $dbinfo 数据库连接配置
      */
     public function __construct($dbinfo) {
         if (isset($dbinfo["type"])) {
@@ -34,15 +34,16 @@ class PDOWrapper {
                 return;
             }
         }
-        $this->error = [1, "Invalid database config"];
+        $this->error = [1, "数据库配置无效"];
     }
 
     /**
-     * @return PDO|boolean PDO driver that has been initialised
+     * 初始化 PDO 连接
+     * @return PDO|boolean 初始化后的 PDO 实例或 false
      */
     public function initPDO() {
         if (!isset($this->dbinfo)) {
-            $this->error = [1, "Invalid database config"];
+            $this->error = [1, "数据库配置无效"];
             return false;
         }
 
@@ -60,7 +61,7 @@ class PDOWrapper {
                 : new PDO("sqlite:"
                     .$this->dbinfo["path"]
                 );
-            // Prevent numbers from being quoted (breaks on MySQL)
+            // 防止数字被当作字符串处理（MySQL 下会出错）
             $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, FALSE);
             return $pdo;
         } catch(PDOException $ex) {
@@ -69,6 +70,10 @@ class PDOWrapper {
         }
     }
 
+    /**
+     * 获取错误信息
+     * @return array|null
+     */
     public function error() {
         return isset($this->error) ? $this->error : null;
     }
